@@ -22,4 +22,5 @@ public class DFHUser {
     private String dob;
     private String name;
     private String email;
+    private String password;
 }
