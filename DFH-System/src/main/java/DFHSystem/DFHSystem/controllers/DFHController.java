@@ -3,6 +3,7 @@ package DFHSystem.DFHSystem.controllers;
 import DFHSystem.DFHSystem.dto.DFHGetUserRequest;
 import DFHSystem.DFHSystem.dto.DFHGetUserResponse;
 import DFHSystem.DFHSystem.entities.DFHUser;
+import DFHSystem.DFHSystem.exceptions.GenericException;
 import DFHSystem.DFHSystem.services.DFHService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +48,14 @@ public class DFHController {
 
     //http://localhost:8081/api/dfhSystem/validate-user
     @PostMapping("/validate-user")
-    public DFHGetUserResponse DFHUser(@RequestBody DFHGetUserRequest dfhGetUserRequest) {
+    public DFHGetUserResponse DFHUser(@RequestBody DFHGetUserRequest dfhGetUserRequest) throws GenericException {
+        if(dfhGetUserRequest.getDob().equalsIgnoreCase("") ||
+                dfhGetUserRequest.getPhoneNumber().equalsIgnoreCase("") ||
+                dfhGetUserRequest.getPhoneNumber().length()!=12
+        )
+            throw new GenericException("Invalid Phone Number or Date Of Birth");
         final DFHUser dfhUser = dfhService.getDFHUser(dfhGetUserRequest);
         return new DFHGetUserResponse(dfhUser.getId(),dfhUser.getPhoneNumber(), dfhUser.getDob(),dfhUser.getName(),dfhUser.getEmail());
+
     }
 }
