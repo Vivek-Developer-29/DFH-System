@@ -1,6 +1,7 @@
 package DFHSystem.DFHSystem.controllers;
 
 import DFHSystem.DFHSystem.dto.DFHGetUserRequest;
+import DFHSystem.DFHSystem.dto.DFHGetUserResponse;
 import DFHSystem.DFHSystem.entities.DFHUser;
 import DFHSystem.DFHSystem.services.DFHService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,10 @@ public class DFHController {
         dfhService.deleteDFHUser(id);
     }
 
-    //http://localhost:8081/api/dfhSystem/request
-    @PostMapping("/request")
-    public DFHUser DFHUser(@RequestBody DFHGetUserRequest dfhGetUserRequest) {
-        return dfhService.getDFHUser(dfhGetUserRequest);
+    //http://localhost:8081/api/dfhSystem/validate-user
+    @PostMapping("/validate-user")
+    public DFHGetUserResponse DFHUser(@RequestBody DFHGetUserRequest dfhGetUserRequest) {
+        final DFHUser dfhUser = dfhService.getDFHUser(dfhGetUserRequest);
+        return new DFHGetUserResponse(dfhUser.getId(),dfhUser.getPhoneNumber(), dfhUser.getDob(),dfhUser.getName(),dfhUser.getEmail());
     }
 }
