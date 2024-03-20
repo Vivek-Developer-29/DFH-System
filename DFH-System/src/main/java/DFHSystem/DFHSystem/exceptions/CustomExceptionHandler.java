@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(GenericException.class)
-    public ResponseEntity<Object> handleDataNotFoundException(
+    public ResponseEntity<Object> handleGenericException(
             GenericException ex, WebRequest request) {
 
 
