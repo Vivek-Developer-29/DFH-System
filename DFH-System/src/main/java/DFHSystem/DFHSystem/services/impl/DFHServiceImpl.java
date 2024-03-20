@@ -3,12 +3,14 @@ package DFHSystem.DFHSystem.services.impl;
 import DFHSystem.DFHSystem.configs.DFHRestTemplateConfig;
 import DFHSystem.DFHSystem.dto.DFHGetUserRequest;
 import DFHSystem.DFHSystem.entities.DFHUser;
+import DFHSystem.DFHSystem.exceptions.GenericException;
 import DFHSystem.DFHSystem.repositories.DFHRepository;
 import DFHSystem.DFHSystem.services.DFHService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public  class DFHServiceImpl implements DFHService {
@@ -46,8 +48,13 @@ public  class DFHServiceImpl implements DFHService {
     }
 
     @Override
-    public DFHUser getDFHUser(DFHGetUserRequest dfhGetUserRequest) {
-        return dfhRepository.findFirstByDobAndPhoneNumber(dfhGetUserRequest.getDob(), dfhGetUserRequest.getPhoneNumber());
+    public DFHUser getDFHUser(DFHGetUserRequest dfhGetUserRequest) throws GenericException {
+        final Optional<DFHUser> firstByDobAndPhoneNumber = dfhRepository.findFirstByDobAndPhoneNumber(dfhGetUserRequest.getDob(), dfhGetUserRequest.getPhoneNumber());
+        if(firstByDobAndPhoneNumber.isEmpty())
+            throw new GenericException("Data Not Found");
+
+        return firstByDobAndPhoneNumber.get();
+
     }
 
 }
